@@ -1,0 +1,7 @@
+SUCCESS = "successful login"
+FAIL = "unsuccessful login"
+DISCONNECT = "connection closed"
+INVALID_USER = "invalid username"
+INVALID_PASS = "invalid password"
+BREAKIN = "possible break-in attempt!"
+OTHER = "other"
