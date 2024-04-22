@@ -1,4 +1,3 @@
-import configure_logging
 import argparse, cmd_names, logging, sys
 from read_ssh_log import read_log, get_entries, LogEntry
 from log_functions import get_ipv4s_from_log, get_message_type, get_user_from_log

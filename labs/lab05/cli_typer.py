@@ -1,4 +1,3 @@
-import configure_logging
 import typer, logging
 import numpy as np
 from typing_extensions import Annotated

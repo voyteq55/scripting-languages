@@ -1,4 +1,3 @@
-import configure_logging
 from typing import Generator, List, Dict, Tuple, Deque
 from collections import deque, defaultdict
 from read_ssh_log import LogEntry, get_namedtuple_from_entry

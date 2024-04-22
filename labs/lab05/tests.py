@@ -1,5 +1,4 @@
 import pytest
-import configure_logging
 from typing import Optional, List
 from datetime import datetime
 from read_ssh_log import LogEntry, get_namedtuple_from_entry, read_log, get_entries
