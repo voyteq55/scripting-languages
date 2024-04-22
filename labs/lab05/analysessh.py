@@ -55,7 +55,7 @@ def get_duration_avg_global(entries: Generator[LogEntry, None, None]) -> Generat
 
 
 def get_parsed_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Script for analysing ssh log files")
     parser.add_argument("--file", required=True, dest="filepath", help="specify a path to a log file")
     parser.add_argument("--log-level", required=False, help="(optional) specify a minimum logging level [DEBUG|INFO|WARNING|ERROR|CRITICAL]")
 
@@ -65,8 +65,8 @@ def get_parsed_args() -> argparse.Namespace:
     subparser.add_parser(cmd_names.MESSAGE_TYPE, help="print a message type for every line")
     random_logs_parser = subparser.add_parser(cmd_names.RANDOM_LOGS_FROM_USER, help="print n random logs for a random user")
     random_logs_parser.add_argument("--n", required=True, help="specify (n) number of logs to print ")
-    ssh_duration_parser = subparser.add_parser(cmd_names.SSH_DURATION)
-    ssh_duration_parser.add_argument("--per-user", action="store_true")
+    ssh_duration_parser = subparser.add_parser(cmd_names.SSH_DURATION, help="print average and std deviation of connection duration")
+    ssh_duration_parser.add_argument("--per-user", action="store_true", help="(optional) indicate that averages are shown separately for each user")
     subparser.add_parser(cmd_names.MOST_AND_LEAST_FREQUENT_USERS, help="print the most and the least frequent users")
     return parser.parse_args()
 
