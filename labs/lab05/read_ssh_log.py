@@ -1,5 +1,7 @@
+import configure_logging
 from typing import Generator, Optional
 from collections import namedtuple
+from collections.abc import Iterable
 from datetime import datetime
 import re, patterns, logging
 
@@ -7,10 +9,15 @@ LogEntry = namedtuple("LogEntry", ["timestamp", "host", "app_comp", "pid", "desc
 date_format = "%b %d %H:%M:%S"
 
 
-def read_log(filepath: str) -> Generator[int, None, None]:
+def read_log(filepath: str) -> Generator[str, None, None]:
     with open(filepath) as file:
-        lines = (line for line in file.readlines())
-    return lines
+        for line in file.readlines():
+            logging.debug(f"Bytes read from line: {len(line.encode('utf-8'))}")
+            yield line
+
+
+def get_entries(lines: Generator[str, None, None]) -> Generator[LogEntry, None, None]:
+    return (nmd_tuple for entry in lines if (nmd_tuple := get_namedtuple_from_entry(entry)))
 
 
 def get_namedtuple_from_entry(entry: str) -> Optional[LogEntry]:
@@ -21,3 +28,7 @@ def get_namedtuple_from_entry(entry: str) -> Optional[LogEntry]:
         return LogEntry(**attrs)
     return None
 
+
+if __name__ == "__main__":
+    for entry in get_entries(read_log("logs/short.log")):
+        print(entry)

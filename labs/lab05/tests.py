@@ -1,8 +1,10 @@
 import pytest
-from typing import Optional
+import configure_logging
+from typing import Optional, List
 from datetime import datetime
-from read_ssh_log import LogEntry, get_namedtuple_from_entry
+from read_ssh_log import LogEntry, get_namedtuple_from_entry, read_log, get_entries
 from log_functions import get_ipv4s_from_log, get_user_from_log, get_message_type
+from process_log import get_most_and_least_frequent_users
 import message_type
 
 
@@ -40,7 +42,7 @@ def test_get_namedtuple_from_entry(entry: str, expected_tuple: Optional[LogEntry
         )
     ]
 )
-def test_get_ipv4s_from_log(entry: LogEntry, expected_ipv4s: list[str]):
+def test_get_ipv4s_from_log(entry: LogEntry, expected_ipv4s: List[str]):
     assert get_ipv4s_from_log(entry) == expected_ipv4s
 
 
@@ -66,7 +68,16 @@ def test_get_ipv4s_from_log(entry: LogEntry, expected_ipv4s: list[str]):
         (
             LogEntry(None, None, None, None, description="pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=112.95.230.3"),
             None
+        ),
+        (
+            LogEntry(None, None, None, None, description="Received disconnect from 119.137.60.156: 11: disconnected by user"),
+            None
+        ),
+        (
+            LogEntry(None, None, None, None, description="Accepted password for fztu from 119.137.60.156 port 56474 ssh2"),
+            "fztu"
         )
+        
         
     ]
 )
@@ -87,6 +98,10 @@ def test_get_user_from_log(entry: LogEntry, expected_user: Optional[str]):
         ),
         (
             "Connection closed by 5.188.10.180 [preauth]",
+            message_type.DISCONNECT
+        ),
+        (
+            "Received disconnect from 119.137.63.195: 11: disconnected by user",
             message_type.DISCONNECT
         ),
         (
@@ -113,3 +128,7 @@ def test_get_user_from_log(entry: LogEntry, expected_user: Optional[str]):
 )
 def test_get_message_type(description: str, expected_type: str):
     assert get_message_type(description) == expected_type
+
+
+def test_get_most_and_least_frequent_users():
+    assert get_most_and_least_frequent_users(get_entries(read_log("logs/short.log"))) == ("webmaster", "fztu")

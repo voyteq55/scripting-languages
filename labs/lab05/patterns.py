@@ -6,10 +6,10 @@ ENTRY = (
     r"(?P<description>.*)$"
 )
 IPV4 = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
-USER = r" user[ =]([^\s]+)"
+USER = r"(?:Accepted password for | user[ =])([^\s]+)"
 SUCCESS = r"^Accepted password"
 FAIL = r" authentication failure"
-DISCONNECT = r"^Connection closed"
+DISCONNECT = r"^(Connection closed|Received disconnect )"
 INVALID_USER = r"[Ii]nvalid user"
 INVALID_PASS = r"^Failed password(?! for invalid user)"
 BREAKIN = r"failed - POSSIBLE BREAK-IN ATTEMPT!$"
