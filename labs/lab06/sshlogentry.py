@@ -48,10 +48,10 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
     
     def __lt__(self, other: object) -> bool:
         if not isinstance(other, SSHLogEntry):
-            raise TypeError(f"< operator not allowed for instances of {type(self) and type(other)}")
+            raise TypeError(f"< operator not allowed for instances of {type(self)} and {type(other)}")
         return self.timestamp < other.timestamp
 
     def __gt__(self, other: object) -> bool:
         if not isinstance(other, SSHLogEntry):
-            raise TypeError(f"< operator not allowed for instances of {type(self) and type(other)}")
+            raise TypeError(f"< operator not allowed for instances of {type(self)} and {type(other)}")
         return self.timestamp > other.timestamp
