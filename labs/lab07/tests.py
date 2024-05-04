@@ -1,6 +1,7 @@
 import pytest
-from typing import List, Dict
+from typing import List, Dict, Callable, Iterable, Any
 from lab07_functions import acronym, median, newton_root, make_alpha_dict, flatten
+from ex2 import forall, exists, atleast, atmost
 
 @pytest.mark.parametrize(
     "strings, expected_result",
@@ -108,3 +109,140 @@ def test_make_alpha_dict(string: str, expected_result: Dict[str, List[str]]):
 )
 def test_flatten(elements: list, expected_result: list):
     assert flatten(elements) == expected_result
+
+
+@pytest.mark.parametrize(
+    "pred, iterable, expected_result",
+    [
+        (
+            lambda x: x < 10,
+            (i for i in range(10)),
+            True
+        ),
+        (
+            lambda x: x % 2 == 0,
+            [0, 2, 4, 6, 7],
+            False
+        ),
+        (
+            lambda x: False,
+            [],
+            True
+        )
+    ]
+)
+def test_forall(pred: Callable[[Any], bool], iterable: Iterable[Any], expected_result: bool):
+    assert forall(pred, iterable) == expected_result
+
+
+@pytest.mark.parametrize(
+    "pred, iterable, expected_result",
+    [
+        (
+            lambda x: x < 10,
+            (i for i in range(10)),
+            True
+        ),
+        (
+            lambda x: x % 2 == 1,
+            [0, 2, 4, 6, 7],
+            True
+        ),
+        (
+            lambda x: len(x) > 0,
+            ["", "", ""],
+            False
+        ),
+        (
+            lambda x: True,
+            [],
+            False
+        )
+    ]
+)
+def test_exists(pred: Callable[[Any], bool], iterable: Iterable[Any], expected_result: bool):
+    assert exists(pred, iterable) == expected_result
+
+
+@pytest.mark.parametrize(
+    "n, pred, iterable, expected_result",
+    [
+        (
+            10,
+            lambda x: x < 10,
+            (i for i in range(10)),
+            True
+        ),
+        (
+            11,
+            lambda x: x < 10,
+            (i for i in range(10)),
+            False
+        ),
+        (
+            3,
+            lambda x: x % 2 == 1,
+            [0, 2, 4, 5, 7],
+            False
+        ),
+        (
+            2,
+            lambda x: x % 2 == 1,
+            [0, 2, 4, 5, 7],
+            True
+        ),
+        (
+            1,
+            lambda x: True,
+            [],
+            False
+        )
+    ]
+)
+def test_atleast(n: int, pred: Callable[[Any], bool], iterable: Iterable[Any], expected_result: bool):
+    assert atleast(n, pred, iterable) == expected_result
+
+
+@pytest.mark.parametrize(
+    "n, pred, iterable, expected_result",
+    [
+        (
+            10,
+            lambda x: x < 10,
+            (i for i in range(10)),
+            True
+        ),
+        (
+            9,
+            lambda x: x < 10,
+            (i for i in range(10)),
+            False
+        ),
+        (
+            3,
+            lambda x: x % 2 == 1,
+            [0, 2, 4, 5, 7],
+            True
+        ),
+        (
+            2,
+            lambda x: x % 2 == 1,
+            [0, 2, 4, 5, 7],
+            True
+        ),
+        (
+            1,
+            lambda x: x % 2 == 1,
+            [0, 2, 4, 5, 7],
+            False
+        ),
+        (
+            1,
+            lambda x: True,
+            [],
+            True
+        )
+    ]
+)
+def test_atmost(n: int, pred: Callable[[Any], bool], iterable: Iterable[Any], expected_result: bool):
+    assert atmost(n, pred, iterable) == expected_result
