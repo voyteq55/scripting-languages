@@ -2,6 +2,7 @@ import pytest
 from typing import List, Dict, Callable, Iterable, Any
 from lab07_functions import acronym, median, newton_root, make_alpha_dict, flatten
 from ex2 import forall, exists, atleast, atmost
+from passwordgenerator import PasswordGenerator
 
 @pytest.mark.parametrize(
     "strings, expected_result",
@@ -246,3 +247,36 @@ def test_atleast(n: int, pred: Callable[[Any], bool], iterable: Iterable[Any], e
 )
 def test_atmost(n: int, pred: Callable[[Any], bool], iterable: Iterable[Any], expected_result: bool):
     assert atmost(n, pred, iterable) == expected_result
+
+
+def test_default_charset_password_generator():
+    pswd_generator = PasswordGenerator(8, 5)
+    passwords = [password for password in pswd_generator]
+    assert len(passwords) == 5
+    for password in passwords:
+        print(password)
+        assert len(password) == 8
+
+
+def test_custom_charset_password_generator():
+    pswd_generator = PasswordGenerator(10, 6, charset={"a", "b", "c", "1", "2", "3"})
+    passwords = [password for password in pswd_generator]
+    assert len(passwords) == 6
+    for password in passwords:
+        print(password)
+        assert len(password) == 10
+
+
+def test_password_generator_explicitly():
+    pswd_generator = PasswordGenerator(5, 4) 
+    pswd_iterator = iter(pswd_generator)
+    passwords = []
+    while True:
+        try:
+            passwords.append(next(pswd_iterator))
+        except StopIteration:
+            break
+    assert len(passwords) == 4
+    for password in passwords:
+        print(password)
+        assert len(password) == 5
