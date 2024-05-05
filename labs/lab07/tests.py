@@ -1,8 +1,12 @@
+import logging_setup
+
 import pytest
 from typing import List, Dict, Callable, Iterable, Any
-from lab07_functions import acronym, median, newton_root, make_alpha_dict, flatten
-from ex2 import forall, exists, atleast, atmost
+from non_imperative_functions import acronym, median, newton_root, make_alpha_dict, flatten
+from higher_order_functions import forall, exists, atleast, atmost
 from passwordgenerator import PasswordGenerator
+from generator_utils import make_generator, make_generator_mem, fibonacci, rec_fibonacci
+
 
 @pytest.mark.parametrize(
     "strings, expected_result",
@@ -280,3 +284,31 @@ def test_password_generator_explicitly():
     for password in passwords:
         print(password)
         assert len(password) == 5
+
+
+def test_make_generator():
+    fib_generator = make_generator(fibonacci)
+    current_fib_numbers = []
+    for fib_number in fib_generator:
+        current_fib_numbers.append(fib_number)
+        if len(current_fib_numbers) >= 10:
+            break
+    assert current_fib_numbers == [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+
+    geometric_generator = make_generator(lambda x: 2 * 3 ** x)
+    current_geometric_sequence = []
+    for number in geometric_generator:
+        current_geometric_sequence.append(number)
+        if len(current_geometric_sequence) >= 5:
+            break
+    assert current_geometric_sequence == [6, 18, 54, 162, 486]
+
+
+def test_make_generator_mem():
+    fib_mem_generator = make_generator_mem(rec_fibonacci)
+    current_fib_numbers = []
+    for fib_number in fib_mem_generator:
+        current_fib_numbers.append(fib_number)
+        if len(current_fib_numbers) >= 10:
+            break
+    assert current_fib_numbers == [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]

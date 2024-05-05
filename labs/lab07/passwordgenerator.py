@@ -1,8 +1,12 @@
 from typing import Iterable, Iterator
-import string, random
+import string, random, logging
+from log_decorator import log
+
 
 DEFAULT_CHARS = list(string.ascii_letters + string.digits)
 
+
+@log(logging.CRITICAL)
 class PasswordGenerator:
     def __init__(self, length: int, count: int, charset: Iterable[str] = DEFAULT_CHARS) -> None:
         self.current_index = 0
